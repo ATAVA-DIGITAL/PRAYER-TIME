@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATAVA Prayer & Qibla Master</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --gold: #d4af37;
+            --gold-light: #f3e5ab;
+            --text-color: #ffffff;
+            --text-muted: #aaaaaa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: linear-gradient(145deg, #1a1a1a, #222222);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 15px;
+        }
+
+        .brand-title {
+            color: var(--gold);
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .brand-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin-top: 3px;
+        }
+
+        .date-box {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--gold-light);
+            background: rgba(212, 175, 55, 0.1);
+            padding: 5px 10px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        /* Countdown Box */
+        .countdown-box {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px dashed var(--gold);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .countdown-title {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .countdown-time {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--gold);
+            margin-top: 5px;
+        }
+
+        /* Location Box */
+        .location-text {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .location-text i {
+            color: var(--gold);
+            margin-right: 5px;
+        }
+
+        /* Prayer Times Grid */
+        .prayer-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .prayer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .prayer-row.active {
+            border-left-color: var(--gold);
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.15), var(--card-bg));
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .prayer-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .prayer-name i {
+            color: var(--text-muted);
+            width: 20px;
+        }
+
+        .prayer-row.active .prayer-name i {
+            color: var(--gold);
+        }
+
+        .prayer-time {
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .prayer-row.active .prayer-time {
+            color: var(--gold);
+            font-size: 1.1rem;
+        }
+
+        /* Tabs/Sections for Qibla & Tasbeeh */
+        .nav-tabs {
+            display: flex;
+            justify-content: space-around;
+            background: #151515;
+            padding: 8px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            width: 30%;
+        }
+
+        .tab-btn.active {
+            background-color: var(--gold);
+            color: #000;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Qibla Compass Utility */
+        .compass-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .compass {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 5px solid var(--gold);
+            position: relative;
+            margin-bottom: 15px;
+            background: radial-gradient(circle, #252525, #151515);
+            box-shadow: 0 0 20px rgba(212,175,55,0.2);
+            transition: transform 0.1s ease-out;
+        }
+
+        .compass-pointer {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 70px solid #ff4444;
+            position: absolute;
+            top: 20px;
+            left: 80px;
+            transform-origin: bottom center;
+        }
+
+        .kaaba-icon {
+            position: absolute;
+            top: 10px;
+            left: 77px;
+            color: var(--gold);
+            font-size: 1.5rem;
+            transform: rotate(0deg);
+        }
+
+        /* Tasbeeh Counter Utility */
+        .tasbeeh-container {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .tasbeeh-display {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--gold);
+            margin-bottom: 15px;
+            background: #151515;
+            padding: 10px;
+            border-radius: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .tasbeeh-btn {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, var(--gold), #aa8410);
+            border: none;
+            color: #000;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(212,175,55,0.4);
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .tasbeeh-btn:active {
+            transform: scale(0.95);
+        }
+
+        .reset-btn {
+            background: none;
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Footer Info */
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            padding-top: 15px;
+        }
+
+        .footer-brand {
+            color: var(--gold);
+            font-weight: bold;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header with ATAVA Branding -->
+    <div class="header">
+        <div class="brand-title">ATAVA</div>
+        <div class="brand-subtitle">Digital Services & Trading</div>
+        <div id="hijri-date" class="date-box">Loading Date...</div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('times')"><i class="fa-solid fa-clock"></i>Time</button>
+        <button class="tab-btn" onclick="switchTab('qibla')"><i class="fa-solid fa-compass"></i>Qibla</button>
+        <button class="tab-btn" onclick="switchTab('tasbeeh')"><i class="fa-solid fa-calculator"></i>Tasbeeh</button>
+    </div>
+
+    <!-- 1. Prayer Times Section -->
+    <div id="section-times" class="tab-content active">
+        <div class="countdown-box">
+            <div id="next-prayer-title" class="countdown-title">അടുത്ത നിസ്കാരം</div>
+            <div id="countdown-timer" class="countdown-time">--:--:--</div>
+        </div>
+        
+        <div class="location-text">
+            <i class="fa-solid fa-location-dot"></i><span id="location-name">Ajman, UAE</span>
+        </div>
+
+        <div class="prayer-list">
+            <div class="prayer-row" id="row-Fajr">
+                <span class="prayer-name"><i class="fa-solid fa-cloud-sun"></i>സുബഹി (Fajr)</span>
+                <span class="prayer-time" id="time-Fajr">--:--</span>
+            </div>
+            <div class="prayer-row" id="row-Dhuhr">
+                <span class="prayer-name"><i class="fa-solid fa-sun"></i>ളുഹർ (Dhuhr)</span>
+                <span class="prayer-time" id="time-Dhuhr">--:--</span>
+            </div>
+            <div class="prayer-row" id="row-Asr">
+                <span class="prayer-name"><i class="fa-solid fa-cloud-sun-rain"></i>അസർ (Asr)</span>
+                <span class="prayer-time" id="time-Asr">--:--</span>
+            </div>
+            <div class="prayer-row" id="row-Maghrib">
+                <span class="prayer-name"><i class="fa-solid fa-moon"></i>മഗ്‌രിബ് (Maghrib)</span>
+                <span class="prayer-time" id="time-Maghrib">--:--</span>
+            </div>
+            <div class="prayer-row" id="row-Isha">
+                <span class="prayer-name"><i class="fa-solid fa-stars"></i>ഇഷാ (Isha)</span>
+                <span class="prayer-time" id="time-Isha">--:--</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Qibla Finder Section -->
+    <div id="section-qibla" class="tab-content">
+        <div class="compass-container">
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">ഫോൺ തറയിൽ നേരെ വച്ച് കഅ്ബയുടെ ദിശ കണ്ടെത്തുക</p>
+            <div class="compass" id="compassRing">
+                <div class="compass-pointer"></div>
+                <div class="kaaba-icon"><i class="fa-solid fa-mosque"></i></div>
+            </div>
+            <p id="qibla-deg" style="color: var(--gold); font-weight: bold; margin-top: 10px;">Qibla Angle: --°</p>
+        </div>
+    </div>
+
+    <!-- 3. Tasbeeh Counter Section -->
+    <div id="section-tasbeeh" class="tab-content">
+        <div class="tasbeeh-container">
+            <div class="tasbeeh-display" id="count-num">0</div>
+            <button class="tasbeeh-btn" onclick="countUp()">COUNT</button><br>
+            <button class="reset-btn" onclick="resetCount()"><i class="fa-solid fa-rotate-right"></i> Reset</button>
+        </div>
+    </div>
+
+    <!-- Footer with Credits -->
+    <div class="footer">
+        Data Entry, Typing Works, Poster & Badge Design<br>
+        <span class="footer-brand">ATAVA DIGITAL SERVICES & TRADING</span><br>
+        <span style="color: #ffffff; font-weight: 500;">Abdul Salam Ahsani</span>
+    </div>
+</div>
+
+<script>
+    // Tab Switching
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById('section-' + tabName).classList.add('active');
+        event.currentTarget.classList.add('active');
+
+        if(tabName === 'qibla') {
+            initQibla();
+        }
+    }
+
+    // Global Prayer Data Variables
+    let prayerTimes = {};
+    let prayerNames = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+
+    // Fetch Prayer Times (Defaults to Ajman, UAE)
+    async function getPrayerTimes() {
+        try {
+            const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Ajman&country=UAE&method=4');
+            const data = await res.json();
+            if(data.code === 200) {
+                const timings = data.data.timings;
+                const dateData = data.data.date;
+                
+                // Display Dates
+                document.getElementById('hijri-date').innerText = dateData.hijri.day + " " + dateData.hijri.month.ar + " " + dateData.hijri.year + " AH";
+                
+                // Save and Display Times
+                prayerNames.forEach(p => {
+                    prayerTimes[p] = timings[p];
+                    document.getElementById('time-' + p).innerText = formatAMPM(timings[p]);
+                });
+
+                updateNextPrayerTimer();
+                setInterval(updateNextPrayerTimer, 1000);
+            }
+        } catch (err) {
+            document.getElementById('hijri-date').innerText = "Network Error";
+        }
+    }
+
+    function formatAMPM(time24) {
+        let [hours, minutes] = time24.split(':');
+        hours = parseInt(hours);
+        let ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; 
+        return hours + ':' + minutes + ' ' + ampm;
+    }
+
+    function updateNextPrayerTimer() {
+        let now = new Date();
+        let currentTimeString = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0');
+        
+        let nextPrayer = null;
+        let nextPrayerTime = null;
+
+        document.querySelectorAll('.prayer-row').forEach(el => el.classList.remove('active'));
+
+        for (let i = 0; i < prayerNames.length; i++) {
+            let pName = prayerNames[i];
+            let pTime = prayerTimes[pName] + ":00";
+            if (pTime > currentTimeString) {
+                nextPrayer = pName;
+                nextPrayerTime = pTime;
+                if(i > 0) {
+                    document.getElementById('row-' + prayerNames[i-1]).classList.add('active');
+                } else {
+                    document.getElementById('row-Isha').classList.add('active');
+                }
+                break;
+            }
+        }
+
+        if (!nextPrayer) {
+            nextPrayer = "Fajr";
+            nextPrayerTime = prayerTimes["Fajr"] + ":00";
+            document.getElementById('row-Isha').classList.add('active');
+        }
+
+        let malayalamNames = { Fajr: "സുബഹി", Dhuhr: "ളുഹർ", Asr: "അസർ", Maghrib: "മഗ്‌രിബ്", Isha: "ഇഷാ" };
+        document.getElementById('next-prayer-title').innerText = "അടുത്ത നിസ്കാരം: " + malayalamNames[nextPrayer];
+
+        // Calculate Difference
+        let timeParts = nextPrayerTime.split(':');
+        let pDate = new Date();
+        pDate.setHours(timeParts[0], timeParts[1], timeParts[2]);
+        if (pDate < now) pDate.setDate(pDate.getDate() + 1);
+
+        let diff = pDate - now;
+        let h = Math.floor(diff / 3600000).toString().padStart(2, '0');
+        let m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+        let s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+
+        document.getElementById('countdown-timer').innerText = `${h}:${m}:${s}`;
+    }
+
+    // Tasbeeh Logic
+    let count = 0;
+    function countUp() {
+        count++;
+        document.getElementById('count-num').innerText = count;
+        if (count % 33 === 0 && navigator.vibrate) {
+            navigator.vibrate(100); // 33 എത്തുമ്പോൾ ചെറിയ വൈബ്രേഷൻ
+        }
+    }
+    function resetCount() {
+        count = 0;
+        document.getElementById('count-num').innerText = count;
+    }
+
+    // Qibla Simple Implementation using Device Orientation
+    function initQibla() {
+        // Ajman Qibla angle is roughly 261 degrees from North
+        const qiblaAngle = 261; 
+        document.getElementById('qibla-deg').innerText = `Qibla Direction: ${qiblaAngle}° W`;
+
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', function(event) {
+                let alpha = event.alpha;
+                if (event.webkitCompassHeading) {
+                    alpha = event.webkitCompassHeading; // iOS support
+                }
+                if(alpha !== null) {
+                    let rotateDeg = qiblaAngle - alpha;
+                    document.getElementById('compassRing').style.transform = `rotate(${rotateDeg}deg)`;
+                }
+            }, Array);
+        }
+    }
+
+    // Start App
+    getPrayerTimes();
+</script>
+</body>
+</html>
