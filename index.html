@@ -3,16 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATAVA Prayer, Iqamah & Adhan Master</title>
+    <title>ATAVA Prayer Master</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #080808;
-            --card-bg: rgba(22, 22, 22, 0.8);
+            --bg-color: #050505;
+            --card-bg: #121212;
+            --section-bg: linear-gradient(180deg, rgba(229, 193, 88, 0.08), rgba(15, 15, 15, 0.6));
             --gold: #e5c158;
-            --gold-glow: rgba(229, 193, 88, 0.35);
+            --gold-glow: rgba(229, 193, 88, 0.25);
             --text-color: #ffffff;
             --text-muted: #777777;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
@@ -20,83 +27,97 @@
             color: var(--text-color);
             padding: 10px;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             min-height: 100vh;
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            font-family: 'Segoe UI', -apple-system, system-ui, sans-serif;
         }
 
+        /* Compact Mobile Shell */
         .container {
             width: 100%;
-            max-width: 420px;
-            background: linear-gradient(145deg, #101010, #151515);
-            border-radius: 24px;
-            padding: 18px;
-            box-shadow: 0 0 25px var(--gold-glow);
+            max-width: 380px; /* മൊബൈലിൽ ഒതുങ്ങി നിൽക്കാൻ സൈസ് കുറച്ചു */
+            background: #0f0f0f;
+            border-radius: 20px;
+            box-shadow: 0 0 20px var(--gold-glow);
             border: 2px solid var(--gold);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Compact Header Area */
-        .mosque-header { text-align: center; margin-bottom: 5px; }
+        /* Matching Premium Header & Footer Background */
+        .header, .footer {
+            background: var(--section-bg);
+            border-bottom: 1px solid rgba(229, 193, 88, 0.25);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .footer {
+            border-bottom: none;
+            border-top: 1px solid rgba(229, 193, 88, 0.25);
+            padding: 10px;
+        }
 
         .editable-mosque {
             background: none;
-            border: 1px solid transparent;
+            border: none;
             color: var(--gold);
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             font-weight: 700;
             text-align: center;
             width: 100%;
-            padding: 3px;
-            border-radius: 6px;
+            margin-bottom: 3px;
             letter-spacing: 0.5px;
         }
 
-        .editable-mosque:focus {
-            border-color: rgba(229, 193, 88, 0.4);
-            background: rgba(229, 193, 88, 0.05);
-            outline: none;
-        }
+        .editable-mosque:focus { outline: none; }
 
         .main-title {
-            text-align: center;
             color: #ffffff;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 900;
-            letter-spacing: 3px;
-            margin-bottom: 2px;
-            text-shadow: 0 0 10px rgba(255,255,255,0.1);
+            letter-spacing: 2px;
+            margin-bottom: 5px;
         }
 
-        .hijri-box {
-            text-align: center;
-            font-size: 0.85rem;
+        /* Super Grid Calendar Box */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 6px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(229, 193, 88, 0.15);
+            font-size: 0.78rem;
             font-weight: 600;
-            color: #fff2cc;
-            background: rgba(229, 193, 88, 0.12);
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin: 0 auto 12px;
-            display: table;
-            border: 1px solid rgba(229, 193, 88, 0.2);
         }
 
-        /* Compact Audio Settings */
+        .cal-left { text-align: left; color: #fff2cc; }
+        .cal-right { text-align: right; color: var(--gold); }
+
+        /* Compact Inner Content */
+        .content-body {
+            padding: 12px;
+        }
+
         .audio-controls {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             background: rgba(255,255,255,0.02);
-            padding: 8px;
-            border-radius: 10px;
-            font-size: 0.85rem;
+            padding: 6px;
+            border-radius: 8px;
+            font-size: 0.8rem;
         }
 
         .audio-controls label {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             cursor: pointer;
             color: var(--text-muted);
         }
@@ -106,106 +127,105 @@
             font-weight: bold;
         }
 
-        /* Extra Compact Prayer Rows */
-        .prayer-list { display: flex; flex-direction: column; gap: 8px; }
+        /* Tight & Super Fit Prayer Rows */
+        .prayer-list { display: flex; flex-direction: column; gap: 6px; }
 
         .prayer-row {
             background: var(--card-bg);
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.03);
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.02);
             transition: 0.3s;
         }
 
         .prayer-row.active {
             border-color: var(--gold);
-            background: linear-gradient(90deg, rgba(229, 193, 88, 0.08), #1a1a1a);
-            box-shadow: 0 0 15px rgba(229, 193, 88, 0.1);
+            background: linear-gradient(90deg, rgba(229, 193, 88, 0.06), #161616);
         }
 
         .row-top { display: flex; justify-content: space-between; align-items: center; }
-        .prayer-name { font-weight: 700; font-size: 0.95rem; letter-spacing: 0.3px; }
-        .prayer-time { color: var(--gold); font-weight: 800; font-size: 1.05rem; }
+        .prayer-name { font-weight: 700; font-size: 0.88rem; }
+        .prayer-time { color: var(--gold); font-weight: 800; font-size: 0.95rem; }
 
         .iqamah-settings {
-            margin-top: 6px;
-            font-size: 0.78rem;
-            color: #999;
+            margin-top: 4px;
+            font-size: 0.72rem;
+            color: #888;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid rgba(255,255,255,0.04);
-            padding-top: 6px;
+            border-top: 1px solid rgba(255,255,255,0.03);
+            padding-top: 4px;
         }
 
         .iqamah-input {
-            width: 40px;
+            width: 35px;
             background: #000;
-            border: 1px solid #333;
+            border: 1px solid #222;
             color: var(--gold);
-            border-radius: 4px;
-            padding: 1px 3px;
+            border-radius: 3px;
+            padding: 1px;
             text-align: center;
             font-weight: bold;
+            font-size: 0.72rem;
         }
 
         .iqamah-countdown {
             color: #55ff55;
             font-weight: 600;
-            font-size: 0.75rem;
         }
 
-        /* Compact Footer */
-        .footer {
-            margin-top: 20px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(229, 193, 88, 0.2);
-            text-align: center;
-        }
-
+        /* Matching Footer Details */
         .footer .company {
             color: var(--gold);
             font-weight: 800;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             letter-spacing: 0.5px;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .footer .services {
-            font-size: 0.72rem;
+            font-size: 0.68rem;
             color: var(--text-muted);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .footer .dev-name {
             color: #ffffff;
             font-weight: 600;
-            font-size: 0.8rem;
-            letter-spacing: 0.2px;
+            font-size: 0.75rem;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="mosque-header">
+    <!-- Matching Background Header -->
+    <div class="header">
         <input type="text" id="mosqueInput" class="editable-mosque" value="ജുമാ മസ്ജിദ് (Tap to Edit)" onchange="saveSettings()">
-    </div>
-    
-    <div class="main-title">PRAYER TIMES</div>
-    <div id="hijri-date" class="hijri-box">Loading...</div>
-
-    <!-- Alarm Type Choice -->
-    <div class="audio-controls">
-        <label><input type="radio" name="alarmType" value="adhan" checked onchange="saveSettings()"><span><i class="fa-solid fa-volume-high"></i> Adhan</span></label>
-        <label><input type="radio" name="alarmType" value="beep" onchange="saveSettings()"><span><i class="fa-solid fa-bell"></i> Beep</span></label>
-        <label><input type="radio" name="alarmType" value="mute" onchange="saveSettings()"><span><i class="fa-solid fa-volume-xmark"></i> Mute</span></label>
+        <div class="main-title">PRAYER TIMES</div>
+        
+        <!-- Super Calendar Row -->
+        <div class="calendar-grid">
+            <div class="cal-left" id="gregorian-date">Loading...</div>
+            <div class="cal-right" id="hijri-date">Loading...</div>
+        </div>
     </div>
 
-    <div class="prayer-list" id="prayerTable">
-        <!-- Rows generated by JS -->
+    <!-- Main Content Area -->
+    <div class="content-body">
+        <div class="audio-controls">
+            <label><input type="radio" name="alarmType" value="adhan" checked onchange="saveSettings()"><span><i class="fa-solid fa-volume-high"></i> Adhan</span></label>
+            <label><input type="radio" name="alarmType" value="beep" onchange="saveSettings()"><span><i class="fa-solid fa-bell"></i> Beep</span></label>
+            <label><input type="radio" name="alarmType" value="mute" onchange="saveSettings()"><span><i class="fa-solid fa-volume-xmark"></i> Mute</span></label>
+        </div>
+
+        <div class="prayer-list" id="prayerTable">
+            <!-- Rows loaded by JS -->
+        </div>
     </div>
 
+    <!-- Matching Background Footer -->
     <div class="footer">
         <div class="company">ATAVA DIGITAL SERVICES & TRADING</div>
         <div class="services">Data Entry, Typing Works, Poster & Badge Design</div>
@@ -219,7 +239,6 @@
     let prayerTimes = {};
     let alarmPlayed = {};
 
-    // Web Audio API for fallback Beep sound
     function playBeep() {
         let context = new (window.AudioContext || window.webkitAudioContext)();
         let osc = context.createOscillator();
@@ -230,10 +249,9 @@
         osc.stop(context.currentTime + 1.5);
     }
 
-    // Play Adhan sound via Online Open-source URL
     function playAdhan() {
         let audio = new Audio("https://www.islamcan.com/audio/adhan/azan1.mp3");
-        audio.play().catch(e => console.log("Audio play blocked until user interaction"));
+        audio.play().catch(e => console.log("Playback blocked"));
     }
 
     function triggerAlarm() {
@@ -268,7 +286,11 @@
             const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Ajman&country=UAE&method=4');
             const json = await res.json();
             const t = json.data.timings;
-            document.getElementById('hijri-date').innerText = json.data.date.hijri.day + " " + json.data.date.hijri.month.ar + " " + json.data.date.hijri.year + " AH";
+            
+            // Set Super Calendar values
+            const dateObj = json.data.date;
+            document.getElementById('gregorian-date').innerText = `${dateObj.gregorian.day} ${dateObj.gregorian.month.en} (${dateObj.gregorian.weekday.en})`;
+            document.getElementById('hijri-date').innerText = `${dateObj.hijri.day} ${dateObj.hijri.month.en} ${dateObj.hijri.year} AH`;
 
             let html = '';
             prayers.forEach((p, i) => {
@@ -293,10 +315,9 @@
             document.getElementById('prayerTable').innerHTML = html;
             loadSettings();
             
-            // Start checking loops
             setInterval(checkLiveUpdates, 1000);
         } catch(e) {
-            document.getElementById('hijri-date').innerText = "Network Error";
+            document.getElementById('gregorian-date').innerText = "Network Error";
         }
     }
 
@@ -319,13 +340,11 @@
             let cdBox = document.getElementById('cd_' + p);
             if(!row || !prayerTimes[p]) return;
 
-            // 1. Alarm triggering right at Azan time
             if (prayerTimes[p] + ":00" === currentHMS && !alarmPlayed[p + currentHM]) {
                 alarmPlayed[p + currentHM] = true;
                 triggerAlarm();
             }
 
-            // 2. Manage Active highlights and Iqamah live countdowns
             let azanTime = prayerTimes[p];
             let iqMinutes = parseInt(document.getElementById('iq_' + p).value) || 0;
             
@@ -340,7 +359,7 @@
                 let diff = iqamahDate - now;
                 let min = Math.floor(diff / 60000);
                 let sec = Math.floor((diff % 60000) / 1000);
-                cdBox.innerText = `ഇഖാമത്ത് ഇനി: ${min}:${sec.toString().padStart(2,'0')}`;
+                cdBox.innerText = `ഇഖാമത്ത്: ${min}:${sec.toString().padStart(2,'0')}`;
             } else {
                 row.classList.remove('active');
                 cdBox.innerText = '';
