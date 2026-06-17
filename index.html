@@ -87,9 +87,20 @@
             border: 1px solid rgba(229, 193, 88, 0.15);
             font-size: 0.75rem;
             font-weight: 600;
+            margin-bottom: 5px;
         }
         .cal-left { text-align: left; color: #fff2cc; }
         .cal-right { text-align: right; color: var(--gold); }
+
+        .location-tag {
+            font-size: 0.75rem;
+            color: #fff2cc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            margin-top: 2px;
+        }
 
         /* Tab Bar Navigation */
         .tab-bar {
@@ -122,13 +133,13 @@
 
         .content-body { padding: 12px; flex-grow: 1; }
 
-        /* Pages Visibility Fix - തുടക്കത്തിൽ രണ്ടാമത്തെ പേജ് ഒളിച്ചു വെക്കുന്നു */
+        /* Pages visibility */
         .page { display: none; }
         .page.active { display: flex; flex-direction: column; gap: 8px; }
 
         /* Tools Page Elements */
         .tools-container {
-            display: none; /* Fix: By default, tools page is hidden */
+            display: none;
             flex-direction: column;
             gap: 12px;
             padding-top: 5px;
@@ -200,9 +211,9 @@
             <div class="cal-left" id="gregorian-date">Detecting Location...</div>
             <div class="cal-right" id="hijri-date">...</div>
         </div>
+        <div class="location-tag" id="location-display"><i class="fa-solid fa-location-dot" style="color: var(--gold)"></i> Detecting Location...</div>
     </div>
 
-    <!-- Tab Bar for Page switching -->
     <div class="tab-bar">
         <button class="tab-btn active" onclick="switchPage('prayer-page', this)"><i class="fa-solid fa-clock"></i> Prayer Times</button>
         <button class="tab-btn" onclick="switchPage('tools-page', this)"><i class="fa-solid fa-toolbox"></i> Tools (ഖിബ്‌ല/തസ്ബീഹ്)</button>
@@ -210,7 +221,6 @@
 
     <div class="content-body">
         
-        <!-- PAGE 1: PRAYER TIMES ONLY -->
         <div id="prayer-page" class="page active">
             <div class="audio-controls">
                 <label><input type="radio" name="alarmType" value="adhan" checked onchange="saveSettings()"><span><i class="fa-solid fa-volume-high"></i> Adhan</span></label>
@@ -219,20 +229,16 @@
             </div>
 
             <div class="prayer-list" id="prayerTable">
-                <!-- Loaded by JS -->
-            </div>
+                </div>
         </div>
 
-        <!-- PAGE 2: TOOLS ONLY (Qibla & Tasbeeh) -->
         <div id="tools-page" class="page tools-container">
-            <!-- Qibla Card -->
             <div class="util-card">
                 <div class="qibla-title"><i class="fa-solid fa-compass" style="color: var(--gold)"></i> ഖിബ്‌ല ദിശ (Qibla Direction)</div>
                 <div class="qibla-deg" id="qibla-display">--°</div>
                 <div class="qibla-desc">വടക്ക് നിന്ന് ക്ലോക്ക്‌വൈസ് (From North Clockwise)</div>
             </div>
             
-            <!-- Tasbeeh Card -->
             <div class="util-card">
                 <div class="qibla-title" style="margin-bottom: 10px;"><i class="fa-solid fa-calculator" style="color: var(--gold)"></i> ഡിജിറ്റൽ തസ്ബീഹ് കൗണ്ടർ</div>
                 <div class="tasbeeh-layout">
@@ -259,7 +265,7 @@
     let alarmPlayed = {};
     let count = 0;
 
-    // Page Switching Logic - Fixed Hide/Show system
+    // Page Switching Logic
     function switchPage(pageId, btn) {
         document.querySelectorAll('.page').forEach(p => {
             p.classList.remove('active');
@@ -341,14 +347,28 @@
                 (position) => {
                     getTimes(position.coords.latitude, position.coords.longitude);
                     getQibla(position.coords.latitude, position.coords.longitude);
+                    getLocationName(position.coords.latitude, position.coords.longitude);
                 },
                 (error) => {
                     getTimes(25.4052, 55.5136); // Default Ajman
-                    document.getElementById('qibla-display').innerText = "269.4°";
+                    document.getElementById('qibla-display').innerText = "257.5°";
+                    document.getElementById('location-display').innerHTML = `<i class="fa-solid fa-location-dot" style="color: var(--gold)"></i> Ajman, UAE`;
                 }
             );
         } else {
             getTimes(25.4052, 55.5136);
+        }
+    }
+
+    async function getLocationName(lat, lng) {
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+            const data = await res.json();
+            const city = data.address.city || data.address.town || data.address.state || "Detected Location";
+            const country = data.address.country || "";
+            document.getElementById('location-display').innerHTML = `<i class="fa-solid fa-location-dot" style="color: var(--gold)"></i> ${city}, ${country}`;
+        } catch(e) {
+            document.getElementById('location-display').innerHTML = `<i class="fa-solid fa-location-dot" style="color: var(--gold)"></i> Location Detected`;
         }
     }
 
@@ -358,7 +378,7 @@
             const json = await res.json();
             document.getElementById('qibla-display').innerText = parseFloat(json.data.direction).toFixed(1) + "°";
         } catch(e) {
-            document.getElementById('qibla-display').innerText = "Error";
+            document.getElementById('qibla-display').innerText = "257.5°";
         }
     }
 
@@ -370,7 +390,9 @@
             
             const dateObj = json.data.date;
             document.getElementById('gregorian-date').innerText = `${dateObj.gregorian.day} ${dateObj.gregorian.month.en} (${dateObj.gregorian.weekday.en})`;
-            document.getElementById('hijri-date').innerText = `${dateObj.hijri.day} ${dateObj.hijri.month.en} ${dateObj.hijri.year} AH`;
+            
+            // Fix: Changed English "AH" to Malayalam "ഹിജ്റ"
+            document.getElementById('hijri-date').innerText = `${dateObj.hijri.day} ${dateObj.hijri.month.en} ${dateObj.hijri.year} ഹിജ്റ`;
 
             let html = '';
             prayers.forEach((p, i) => {
