@@ -39,7 +39,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            min-height: 580px; /* കറക്റ്റ് ആപ്പ് ഷേപ്പ് കിട്ടാൻ */
+            min-height: 580px;
         }
 
         .header, .footer {
@@ -53,7 +53,7 @@
             border-bottom: none;
             border-top: 1px solid rgba(229, 193, 88, 0.25);
             padding: 10px;
-            margin-top: auto; /* ഫൂട്ടർ എപ്പോഴും താഴെ നിൽക്കാൻ */
+            margin-top: auto;
         }
 
         .editable-mosque {
@@ -91,7 +91,7 @@
         .cal-left { text-align: left; color: #fff2cc; }
         .cal-right { text-align: right; color: var(--gold); }
 
-        /* Tab Navigation Bar */
+        /* Tab Bar Navigation */
         .tab-bar {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -131,7 +131,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            padding-top: 10px;
+            padding-top: 5px;
         }
 
         .util-card {
@@ -155,7 +155,7 @@
         .audio-controls {
             display: flex; justify-content: center; gap: 12px;
             background: rgba(255,255,255,0.02); padding: 6px; border-radius: 8px; font-size: 0.78rem;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         .audio-controls label { display: flex; align-items: center; gap: 4px; cursor: pointer; color: var(--text-muted); }
         .audio-controls input:checked + span { color: var(--gold); font-weight: bold; }
@@ -209,7 +209,7 @@
 
     <div class="content-body">
         
-        <!-- PAGE 1: PRAYER TIMES -->
+        <!-- PAGE 1: PRAYER TIMES ONLY -->
         <div id="prayer-page" class="page active">
             <div class="audio-controls">
                 <label><input type="radio" name="alarmType" value="adhan" checked onchange="saveSettings()"><span><i class="fa-solid fa-volume-high"></i> Adhan</span></label>
@@ -222,7 +222,7 @@
             </div>
         </div>
 
-        <!-- PAGE 2: EXTRA PAGE (TOOLS) -->
+        <!-- PAGE 2: TOOLS ONLY (Qibla & Tasbeeh) -->
         <div id="tools-page" class="page tools-container">
             <!-- Qibla Card -->
             <div class="util-card">
