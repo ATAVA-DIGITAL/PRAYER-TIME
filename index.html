@@ -103,7 +103,7 @@
             background: none;
             border: none;
             color: var(--text-muted);
-            padding: 10px;
+            padding: 12px;
             font-weight: bold;
             font-size: 0.85rem;
             cursor: pointer;
@@ -122,17 +122,18 @@
 
         .content-body { padding: 12px; flex-grow: 1; }
 
-        /* Pages visibility */
+        /* Pages Visibility Fix - തുടക്കത്തിൽ രണ്ടാമത്തെ പേജ് ഒളിച്ചു വെക്കുന്നു */
         .page { display: none; }
         .page.active { display: flex; flex-direction: column; gap: 8px; }
 
         /* Tools Page Elements */
         .tools-container {
-            display: flex;
+            display: none; /* Fix: By default, tools page is hidden */
             flex-direction: column;
             gap: 12px;
             padding-top: 5px;
         }
+        .tools-container.active { display: flex; }
 
         .util-card {
             background: #141414;
@@ -258,12 +259,21 @@
     let alarmPlayed = {};
     let count = 0;
 
-    // Page Switching Logic
+    // Page Switching Logic - Fixed Hide/Show system
     function switchPage(pageId, btn) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(p => {
+            p.classList.remove('active');
+            p.style.display = 'none';
+        });
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         
-        document.getElementById(pageId).classList.add('active');
+        const activePage = document.getElementById(pageId);
+        activePage.classList.add('active');
+        if (pageId === 'tools-page') {
+            activePage.style.display = 'flex';
+        } else {
+            activePage.style.display = 'block';
+        }
         btn.classList.add('active');
     }
 
