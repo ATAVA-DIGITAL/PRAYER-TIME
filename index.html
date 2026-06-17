@@ -39,6 +39,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            min-height: 580px; /* കറക്റ്റ് ആപ്പ് ഷേപ്പ് കിട്ടാൻ */
         }
 
         .header, .footer {
@@ -52,6 +53,7 @@
             border-bottom: none;
             border-top: 1px solid rgba(229, 193, 88, 0.25);
             padding: 10px;
+            margin-top: auto; /* ഫൂട്ടർ എപ്പോഴും താഴെ നിൽക്കാൻ */
         }
 
         .editable-mosque {
@@ -89,63 +91,95 @@
         .cal-left { text-align: left; color: #fff2cc; }
         .cal-right { text-align: right; color: var(--gold); }
 
-        .content-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-
-        /* Super Grid Utilities (Qibla & Tasbeeh Side by Side) */
-        .utility-grid {
+        /* Tab Navigation Bar */
+        .tab-bar {
             display: grid;
-            grid-template-columns: 1fr 1.1fr;
-            gap: 8px;
+            grid-template-columns: 1fr 1fr;
+            background: rgba(255,255,255,0.02);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn.active {
+            color: var(--gold);
+            background: rgba(229, 193, 88, 0.05);
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .content-body { padding: 12px; flex-grow: 1; }
+
+        /* Pages visibility */
+        .page { display: none; }
+        .page.active { display: flex; flex-direction: column; gap: 8px; }
+
+        /* Tools Page Elements */
+        .tools-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-top: 10px;
         }
 
         .util-card {
             background: #141414;
             border: 1px solid rgba(229, 193, 88, 0.15);
-            border-radius: 10px;
-            padding: 8px;
+            border-radius: 12px;
+            padding: 20px;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
 
-        .qibla-title { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 2px; }
-        .qibla-deg { font-size: 1rem; color: var(--gold); font-weight: 800; }
-        .qibla-desc { font-size: 0.65rem; color: #888; }
+        .qibla-title { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px; }
+        .qibla-deg { font-size: 1.8rem; color: var(--gold); font-weight: 800; }
+        .qibla-desc { font-size: 0.75rem; color: #888; margin-top: 4px; }
 
-        .tasbeeh-layout { display: flex; align-items: center; gap: 8px; width: 100%; justify-content: center; }
-        .tasbeeh-display { font-size: 1.2rem; font-weight: 800; color: #55ff55; background: #000; padding: 2px 8px; border-radius: 4px; min-width: 45px; }
-        .tasbeeh-btn { background: var(--gold); border: none; color: #000; font-weight: bold; padding: 4px 8px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; }
-        .tasbeeh-reset { font-size: 0.7rem; color: var(--text-muted); cursor: pointer; text-decoration: underline; margin-top: 3px; }
+        .tasbeeh-layout { display: flex; align-items: center; gap: 15px; width: 100%; justify-content: center; margin-bottom: 5px; }
+        .tasbeeh-display { font-size: 2rem; font-weight: 800; color: #55ff55; background: #000; padding: 5px 15px; border-radius: 8px; min-width: 80px; text-align: center; border: 1px solid #222; }
+        .tasbeeh-btn { background: var(--gold); border: none; color: #000; font-weight: bold; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; }
+        .tasbeeh-reset { font-size: 0.8rem; color: var(--text-muted); cursor: pointer; text-decoration: underline; display: inline-block; margin-top: 5px; }
 
+        /* Audio & Prayer List styles */
         .audio-controls {
             display: flex; justify-content: center; gap: 12px;
-            background: rgba(255,255,255,0.02); padding: 5px; border-radius: 8px; font-size: 0.78rem;
+            background: rgba(255,255,255,0.02); padding: 6px; border-radius: 8px; font-size: 0.78rem;
+            margin-bottom: 6px;
         }
         .audio-controls label { display: flex; align-items: center; gap: 4px; cursor: pointer; color: var(--text-muted); }
         .audio-controls input:checked + span { color: var(--gold); font-weight: bold; }
 
-        .prayer-list { display: flex; flex-direction: column; gap: 5px; }
+        .prayer-list { display: flex; flex-direction: column; gap: 6px; }
         .prayer-row {
-            background: var(--card-bg); padding: 7px 12px; border-radius: 10px;
+            background: var(--card-bg); padding: 8px 12px; border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.02); transition: 0.3s;
         }
         .prayer-row.active {
             border-color: var(--gold); background: linear-gradient(90deg, rgba(229, 193, 88, 0.06), #161616);
         }
         .row-top { display: flex; justify-content: space-between; align-items: center; }
-        .prayer-name { font-weight: 700; font-size: 0.85rem; }
-        .prayer-time { color: var(--gold); font-weight: 800; font-size: 0.92rem; }
+        .prayer-name { font-weight: 700; font-size: 0.88rem; }
+        .prayer-time { color: var(--gold); font-weight: 800; font-size: 0.95rem; }
 
         .iqamah-settings {
-            margin-top: 3px; font-size: 0.7rem; color: #888;
+            margin-top: 4px; font-size: 0.72rem; color: #888;
             display: flex; justify-content: space-between; align-items: center;
-            border-top: 1px solid rgba(255,255,255,0.03); padding-top: 3px;
+            border-top: 1px solid rgba(255,255,255,0.03); padding-top: 4px;
         }
         .iqamah-input {
-            width: 32px; background: #000; border: 1px solid #222; color: var(--gold);
-            border-radius: 3px; padding: 1px; text-align: center; font-weight: bold; font-size: 0.7rem;
+            width: 35px; background: #000; border: 1px solid #222; color: var(--gold);
+            border-radius: 3px; padding: 1px; text-align: center; font-weight: bold; font-size: 0.72rem;
         }
         .iqamah-countdown { color: #55ff55; font-weight: 600; }
 
@@ -167,35 +201,47 @@
         </div>
     </div>
 
+    <!-- Tab Bar for Page switching -->
+    <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchPage('prayer-page', this)"><i class="fa-solid fa-clock"></i> Prayer Times</button>
+        <button class="tab-btn" onclick="switchPage('tools-page', this)"><i class="fa-solid fa-toolbox"></i> Tools (ഖിബ്‌ല/തസ്ബീഹ്)</button>
+    </div>
+
     <div class="content-body">
-        <!-- New Grid for Qibla and Tasbeeh Row -->
-        <div class="utility-grid">
+        
+        <!-- PAGE 1: PRAYER TIMES -->
+        <div id="prayer-page" class="page active">
+            <div class="audio-controls">
+                <label><input type="radio" name="alarmType" value="adhan" checked onchange="saveSettings()"><span><i class="fa-solid fa-volume-high"></i> Adhan</span></label>
+                <label><input type="radio" name="alarmType" value="beep" onchange="saveSettings()"><span><i class="fa-solid fa-bell"></i> Beep</span></label>
+                <label><input type="radio" name="alarmType" value="mute" onchange="saveSettings()"><span><i class="fa-solid fa-volume-xmark"></i> Mute</span></label>
+            </div>
+
+            <div class="prayer-list" id="prayerTable">
+                <!-- Loaded by JS -->
+            </div>
+        </div>
+
+        <!-- PAGE 2: EXTRA PAGE (TOOLS) -->
+        <div id="tools-page" class="page tools-container">
             <!-- Qibla Card -->
             <div class="util-card">
-                <span class="qibla-title"><i class="fa-solid fa-compass" style="color: var(--gold)"></i> ഖിബ്‌ല ദിശ</span>
-                <span class="qibla-deg" id="qibla-display">--°</span>
-                <span class="qibla-desc">വടക്ക് നിന്ന് ക്ലോക്ക്‌വൈസ്</span>
+                <div class="qibla-title"><i class="fa-solid fa-compass" style="color: var(--gold)"></i> ഖിബ്‌ല ദിശ (Qibla Direction)</div>
+                <div class="qibla-deg" id="qibla-display">--°</div>
+                <div class="qibla-desc">വടക്ക് നിന്ന് ക്ലോക്ക്‌വൈസ് (From North Clockwise)</div>
             </div>
             
             <!-- Tasbeeh Card -->
             <div class="util-card">
+                <div class="qibla-title" style="margin-bottom: 10px;"><i class="fa-solid fa-calculator" style="color: var(--gold)"></i> ഡിജിറ്റൽ തസ്ബീഹ് കൗണ്ടർ</div>
                 <div class="tasbeeh-layout">
                     <span class="tasbeeh-display" id="t-count">0</span>
-                    <button class="tasbeeh-btn" onclick="countTasbeeh()">എണ്ണുക</button>
+                    <button class="tasbeeh-btn" onclick="countTasbeeh()">TAP</button>
                 </div>
-                <span class="tasbeeh-reset" onclick="resetTasbeeh()">റീസെറ്റ്</span>
+                <span class="tasbeeh-reset" onclick="resetTasbeeh()">Reset Counter</span>
             </div>
         </div>
 
-        <div class="audio-controls">
-            <label><input type="radio" name="alarmType" value="adhan" checked onchange="saveSettings()"><span><i class="fa-solid fa-volume-high"></i> Adhan</span></label>
-            <label><input type="radio" name="alarmType" value="beep" onchange="saveSettings()"><span><i class="fa-solid fa-bell"></i> Beep</span></label>
-            <label><input type="radio" name="alarmType" value="mute" onchange="saveSettings()"><span><i class="fa-solid fa-volume-xmark"></i> Mute</span></label>
-        </div>
-
-        <div class="prayer-list" id="prayerTable">
-            <!-- Rows loaded by JS -->
-        </div>
     </div>
 
     <div class="footer">
@@ -212,7 +258,16 @@
     let alarmPlayed = {};
     let count = 0;
 
-    // Tasbeeh Counter Logic
+    // Page Switching Logic
+    function switchPage(pageId, btn) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        
+        document.getElementById(pageId).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    // Tasbeeh Logic
     function countTasbeeh() {
         count++;
         document.getElementById('t-count').innerText = count;
@@ -287,7 +342,6 @@
         }
     }
 
-    // ഖിബ്‌ല ദിശ കൃത്യമായി കണക്കാക്കുന്ന API സിസ്റ്റം
     async function getQibla(lat, lng) {
         try {
             const res = await fetch(`https://api.aladhan.com/v1/qibla/${lat}/${lng}`);
